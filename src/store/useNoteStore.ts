@@ -36,9 +36,9 @@ export const useNoteStore = create<NoteStore>()(
         })),
     }),
     {
-      name: 'notes-storage', // unique name for localStorage key
-      storage: createJSONStorage(() => localStorage), // use localStorage
-      partialize: (state) => ({ notes: state.notes }), // only persist `notes`
+      name: 'notes-storage', 
+      storage: createJSONStorage(() => localStorage), 
+      partialize: (state) => ({ notes: state.notes }),
     }
   )
 );
