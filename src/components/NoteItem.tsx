@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import type { Note } from "../types";
 
-
 type NoteItemProps = {
   note: Note;
   onDelete: (id: string) => void;
-  onUpdate: (id: string, title: string, content: string) => void;
+  onUpdate: (
+    id: string,
+    title: string,
+    content: string,
+    tags: string[]
+  ) => void;
 };
 
 export default function NoteItem({ note, onDelete, onUpdate }: NoteItemProps) {
@@ -13,12 +17,18 @@ export default function NoteItem({ note, onDelete, onUpdate }: NoteItemProps) {
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
 
+  const [tagsInput, setTagsInput] = useState(note.tags.join(", "));
+
   useEffect(() => {
     console.log(JSON.stringify(note, null, 2));
-  }, [note])
+  }, [note]);
 
   const handleSave = () => {
-    onUpdate(note.id, title, content);
+    const tags = tagsInput
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag !== "");
+    onUpdate(note.id, title, content, tags);
     setIsEditing(false);
   };
 
@@ -41,6 +51,13 @@ export default function NoteItem({ note, onDelete, onUpdate }: NoteItemProps) {
           rows={3}
           placeholder="Content"
         ></textarea>
+        <input
+          type="text"
+          value={tagsInput}
+          onChange={(e) => setTagsInput(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded mb-2"
+          placeholder="Tags (comma-separated, e.g. work, idea"
+        />
         <div>
           <button
             onClick={handleSave}
@@ -63,6 +80,17 @@ export default function NoteItem({ note, onDelete, onUpdate }: NoteItemProps) {
     <div className="bg-white p-4 rounded shadow">
       <h2 className="text-xl font-semibold">{note.title}</h2>
       <p className="mt-2 text-gray-700">{note.content}</p>
+
+      <div className="mt-2">
+        {note.tags.map((tag, index) => (
+          <span
+            key={index}
+            className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mr-1 mb-1"
+          >
+            #{tag}
+          </span>
+        ))}
+      </div>
       <div className="mt-3 space-x-2">
         <button
           onClick={() => setIsEditing(true)}

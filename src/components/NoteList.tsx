@@ -4,7 +4,7 @@ import type { Note } from "../types";
 type NoteListProps = {
     notes: Note[];
     onDelete: (id: string) => void;
-    onUpdate: (id: string, title: string, content: string) => void;
+    onUpdate: (id: string, title: string, content: string, tags: string[]) => void;
 };
 
 export default function NoteList({ notes, onDelete, onUpdate}: NoteListProps){

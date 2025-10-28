@@ -3,9 +3,9 @@ import type { Note } from "../types";
 
 type NoteStore = {
   notes: Note[];
-  addNote: (title: string, content: string) => void;
+  addNote: (title: string, content: string, tags?: string[]) => void;
   deleteNote: (id: string) => void;
-  updateNote: (id: string, title: string, content: string) => void;
+  updateNote: (id: string, title: string, content: string, tags:string[]) => void;
 };
 
 export const useNoteStore = create<NoteStore>((set) => ({
@@ -14,9 +14,10 @@ export const useNoteStore = create<NoteStore>((set) => ({
       id: Math.random().toString(),
       title: "Welcome",
       content: "This is your first note!",
+      tags: ['welcome', 'demo']
     },
   ],
-  addNote: (title, content) =>
+  addNote: (title, content, tags = []) =>
     set((state) => {
       const id = Math.random().toString();
       console.log("Creating id of ", id);
@@ -27,6 +28,7 @@ export const useNoteStore = create<NoteStore>((set) => ({
             id: id,
             title: `${title + state.notes.length.toString()}`,
             content,
+            tags
           },
         ],
       };
@@ -42,12 +44,12 @@ export const useNoteStore = create<NoteStore>((set) => ({
       };
     });
   },
-  updateNote: (id, title, content) => {
+  updateNote: (id, title, content, tags = []) => {
     console.log("UpdateLogic", id, typeof id);
     set((state) => {
       return {
         notes: state.notes.map((note) => 
-          note.id === id ? { ...note, title, content }: note
+          note.id === id ? { ...note, title, content, tags }: note
         ),
       };
     });
