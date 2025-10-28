@@ -2,6 +2,6 @@ export type Note = {
     id: string;
     title: string;
     content: string;
-    tags: string[];
-    createdAt: Date;
+//     tags: string[];
+//     createdAt: Date;
 }

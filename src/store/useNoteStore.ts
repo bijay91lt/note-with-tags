@@ -1,16 +1,11 @@
 import { create } from "zustand";
-
-type Note = {
-  id: string;
-  title: string;
-  content: string;
-};
+import type { Note } from "../types";
 
 type NoteStore = {
   notes: Note[];
   addNote: (title: string, content: string) => void;
   deleteNote: (id: string) => void;
-  deleteFirstNote: () => void;
+  updateNote: (id: string, title: string, content: string) => void;
 };
 
 export const useNoteStore = create<NoteStore>((set) => ({
@@ -40,17 +35,20 @@ export const useNoteStore = create<NoteStore>((set) => ({
     console.log("Deleting note ID:", id, typeof id);
     set((state) => {
       return {
-        notes: state.notes.filter((val) => {
-          console.log("deleting", val);
-          return val.id !== id;
+        notes: state.notes.filter((note) => {
+          console.log("deleting", note);
+          return note.id !== id;
         }),
       };
     });
   },
-  deleteFirstNote: () => {
+  updateNote: (id, title, content) => {
+    console.log("UpdateLogic", id, typeof id);
     set((state) => {
       return {
-        notes: state.notes.slice(1),
+        notes: state.notes.map((note) => 
+          note.id === id ? { ...note, title, content }: note
+        ),
       };
     });
   },
